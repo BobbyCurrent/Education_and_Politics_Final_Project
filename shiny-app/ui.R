@@ -8,26 +8,26 @@
 #
 
 library(shiny)
+library(shinythemes)
+library(tidyverse)
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(
+shinyUI(navbarPage(
+theme = shinytheme("flatly"),
 
+"Education and Political Leaning",
+    
     # Application title
-    titlePanel("Old Faithful Geyser Data"),
+    tabPanel("About",
+             p("Good Morning America", a("Link", href = "https://datasetsearch.research.google.com/search?query=education%20spending&docid=aucTpd7EMjRiMgOaAAAAAA%3D%3D")),
+             h1("Don't reelect the Orange"),
+            
+             ),
 
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
+    tabPanel("Republicans and Democrats",
+             plotOutput("carPlot")
+             
     )
+
+    
 ))
