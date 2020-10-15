@@ -9,10 +9,25 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
+setwd("/Applications/GOV 50/Final_Project/Milestones:Final Project/Education_and_Politics_Final_Project/shiny-app")
 ```
 
 ```{r}
 school_spending_2017_2018 <-
-read_excel("Raw Data/Stfis180_1a.xlsx")
+spending_data_2018 <-
+  read_excel("Raw_Data/Stfis180_1a.xlsx") %>%
+group_by(STNAME) %>%
+  select(STNAME, R1A)
+  
+
+school_spending_2017_2018 %>%
+  ggplot(aes(x = STNAME, y = R1A)) +
+  geom_col() +
+  labs(x = "State Name", y = "Some Kind of Spending") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+
+  
 ```
 
