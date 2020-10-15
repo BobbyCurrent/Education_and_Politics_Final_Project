@@ -20,7 +20,7 @@ theme = shinytheme("flatly"),
     
     # Application title
     tabPanel("About",
-             p("Good Morning America", a("This is the link to my github.", href = "https://datasetsearch.research.google.com/search?query=education%20spending&docid=aucTpd7EMjRiMgOaAAAAAA%3D%3D")),
+             p("Good Morning America", a("This is the link to my github.", href = "https://github.com/BobbyCurrent/Education_and_Politics_Final_Project")),
              h1("Don't reelect the Orange"),
              p("My project is about the possible correlation between the quality of K-12 education in America and political party affiliation.
                I want to see if states with better education systems tend to lean toward the Democratic or Republican party in both national and statewide elections.
