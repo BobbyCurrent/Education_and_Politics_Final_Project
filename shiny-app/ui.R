@@ -28,7 +28,7 @@ theme = shinytheme("flatly"),
                I will be looking at how each state's education system is ranked and the composition of their representatives in both state and federal government to understand the relationship between the level of education and political leaning.")
              ),
 
-    tabPanel("Republicans and Democrats",
+    tabPanel("School Spending Plot",
              plotOutput("carPlot")
              
     )
