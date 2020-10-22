@@ -16,16 +16,24 @@ school_spending_2017_2018 <-
 spending_data_2018 <-
   read_excel("Raw_Data/Stfis180_1a.xlsx") %>%
 group_by(STNAME) %>%
-  select(STNAME, R1A)
+  select(STNAME, E11A)
   
 
-school_spending_2017_2018 %>%
-  ggplot(aes(x = STNAME, y = R1A)) +
+plot_1 <- school_spending_2017_2018 %>%
+  ggplot(aes(x = STNAME, y = E11A)) +
   geom_col() +
-  labs(x = "State Name", y = "Some Kind of Spending") +
+  labs(x = "State", y = "Total Amount Paid", title = "The Total Amount Paid to Teachers in Regular Education Programs by State", subtitle = "2017 - 2018 School Year") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
+plot_1
 
+
+
+
+
+spending_by_state <- read_excel("Raw_Data/tabn236.25.xls")
+
+spending_per_student_by_state <- read_excel("Raw_Data/public-school-per-pupil-expenditures.xlsx")
 
   
 ```
