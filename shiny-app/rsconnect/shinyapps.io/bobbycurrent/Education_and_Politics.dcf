@@ -5,8 +5,8 @@ account: bobbycurrent
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3025743
-bundleId: 3772184
+bundleId: 3776164
 url: https://bobbycurrent.shinyapps.io/Education_and_Politics/
-when: 1603401119.66018
+when: 1603496123.96737
 asMultiple: FALSE
 asStatic: FALSE

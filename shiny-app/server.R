@@ -21,7 +21,11 @@ shinyServer(function(input, output) {
         school_spending_2017_2018 %>%
             ggplot(aes(x = STNAME, y = E11A)) +
             geom_col() +
-            labs(x = "State", y = "Total Amount Paid", title = "The Total Amount Paid to Teachers in Regular Education Programs by State", subtitle = "2017 - 2018 School Year") +
+            labs(x = "State", 
+                 y = "Total Amount Paid", 
+                 title = "The Total Amount Paid to Teachers in 
+                 Regular Education Programs by State", 
+                 subtitle = "2017 - 2018 School Year") +
             theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
        

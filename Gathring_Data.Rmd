@@ -23,14 +23,21 @@ group_by(STNAME) %>%
 plot_1 <- school_spending_2017_2018 %>%
   ggplot(aes(x = STNAME, y = E11A)) +
   geom_col() +
-  labs(x = "State", y = "Total Amount Paid", title = "The Total Amount Paid to Teachers in Regular Education Programs by State", subtitle = "2017 - 2018 School Year") +
+  labs(x = "State", 
+       y = "Total Amount Paid", 
+       title = "The Total Amount Paid to Teachers in 
+       Regular Education Programs by State", 
+       subtitle = "2017 - 2018 School Year") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 plot_1
 
 
 
-
+presidential_elections <- read_csv("Raw_Data/countypres_2000-2016.csv") %>%
+  mutate(vote_prop = (candidatevotes / totalvotes)) %>%
+  mutate(percent_won = (vote_prop * 100))
+  #filter(party == "democrat" | "republican")
 
 spending_by_state <- read_excel("Raw_Data/tabn236.25.xls", skip = 2) %>%
   clean_names()
