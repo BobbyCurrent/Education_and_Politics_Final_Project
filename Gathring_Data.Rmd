@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
+library(janitor)
 ```
 
 ```{r}
@@ -31,9 +32,11 @@ plot_1
 
 
 
-spending_by_state <- read_excel("Raw_Data/tabn236.25.xls")
+spending_by_state <- read_excel("Raw_Data/tabn236.25.xls", skip = 2) %>%
+  clean_names()
 
-spending_per_student_by_state <- read_excel("Raw_Data/public-school-per-pupil-expenditures.xlsx")
+spending_per_student_by_state <- read_excel("Raw_Data/public-school-per-pupil-expenditures.xlsx", skip = 3) %>%
+  clean_names()
 
   
 ```
