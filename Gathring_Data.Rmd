@@ -76,3 +76,29 @@ left_join(districts_and_counties, presidential_elections, by = c("NAME_COUNTY19"
 
 ```
 
+```{r}
+
+
+county_codes <- read_csv("Raw_Data/county_codes.csv") %>%
+  clean_names() %>%
+  select(1:2) %>%
+  mutate(conum = gsub("^.", "", stcou)) %>%
+  mutate(conum = as.double(conum))
+
+
+district_finances_16_17 <- read_csv("Raw_Data/district_finances_16_17.csv") %>%
+  clean_names()
+
+district_codes_2016_17 <- left_join(district_finances_16_17, county_codes, by = "conum") %>%
+  group_by(conum) %>%
+  
+  # Join before summarizing
+  
+ # summarize(tfedrev = sum(tfedrev), totalrev = sum(totalrev), totalexp = sum(totalexp), area_name) %>%
+  separate(area_name, 
+           into = c("county", "state"), 
+           sep = ", ") %>%
+  left_join(presidential_elections, by = c("county", "state" = "state_po"))
+
+```
+
