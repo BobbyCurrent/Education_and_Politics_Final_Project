@@ -26,6 +26,7 @@ districts_by_county <- read_excel("Raw_Data/grf19_lea_county.xlsx") %>%
 districts_by_county
 
 
+spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv")
 
 plot_1 <- school_spending_2017_2018 %>%
   ggplot(aes(x = STNAME, y = E11A)) +
@@ -76,7 +77,27 @@ left_join(districts_and_counties, presidential_elections, by = c("NAME_COUNTY19"
 
 ```
 
+```{r district spending}
+spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv") %>%
+  clean_names()
+
+
+
+
+
+```
+
+
+
 ```{r}
+
+spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv") %>%
+  clean_names()
+
+
+spending_2012
+
+
 
 
 county_codes <- read_csv("Raw_Data/county_codes.csv") %>%
