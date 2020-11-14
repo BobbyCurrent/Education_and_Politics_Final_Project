@@ -81,8 +81,16 @@ left_join(districts_and_counties, presidential_elections, by = c("NAME_COUNTY19"
 
 #Select relevant columns, mutate year column for each one. Join all of them together, by year and district, full join. Only add president stuff after this step.
 
-spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv") %>%
-  clean_names()
+spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv", 
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+  clean_names() %>%
+  select(conum, name, stname, stabbr, totalrev, totalexp, tlocrev, tstrev, tfedrev) %>%
+  mutate(year = 2012)
+
+spending_2012
+
 
 spending_2008 <- read_csv("Raw_Data/district_spending_2008.csv") %>%
   clean_names()
