@@ -182,6 +182,20 @@ spending_2016 <- read_csv("Raw_Data/district_spending_2016.csv",
 
 ```
 
+```{r new joins}
+
+final_data <- full_join(spending_2004, spending_2008) %>%
+  full_join(spending_2012) %>%
+  full_join(spending_2016) %>%
+  left_join(presidential_elections, by = c("conum" = "FIPS"))
+
+
+
+
+
+
+
+```
 
 
 ```{r}
