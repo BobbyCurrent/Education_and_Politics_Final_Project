@@ -200,10 +200,6 @@ final_data <- full_join(spending_2004, spending_2008) %>%
 
 ```{r}
 
-
-
-
-
 county_codes <- read_csv("Raw_Data/county_codes.csv") %>%
   clean_names() %>%
   select(1:2) %>%
