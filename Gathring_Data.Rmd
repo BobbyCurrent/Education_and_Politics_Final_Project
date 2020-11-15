@@ -189,7 +189,7 @@ final_data <- full_join(spending_2004, spending_2008) %>%
   full_join(spending_2016) %>%
   left_join(presidential_elections, by = c("conum" = "FIPS"))
 
-
+final_data
 
 
 
@@ -206,10 +206,14 @@ students_2008 <- read_csv("Raw_Data/non_fiscal_2008.csv") %>%
 
 
 
-read_csv("Raw_Data/non_fiscal_2012.csv") %>%
+students_2012 <- read_csv("Raw_Data/non_fiscal_2012.csv") %>%
   clean_names() %>%
   select(conum, name, member) %>%
   mutate(year = 2012)
+
+
+
+# left_join(spending_2008, students_2008, by = "conum")
 
 ```
 
