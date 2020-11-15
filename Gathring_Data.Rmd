@@ -198,6 +198,22 @@ final_data <- full_join(spending_2004, spending_2008) %>%
 ```
 
 
+```{r non fiscal stuff}
+students_2008 <- read_csv("Raw_Data/non_fiscal_2008.csv") %>%
+  clean_names() %>%
+  select(conum07, pk1207, name07) %>%
+  mutate(year = 2008)
+
+
+
+read_csv("Raw_Data/non_fiscal_2012.csv") %>%
+  clean_names() %>%
+  select(conum, name, member) %>%
+  mutate(year = 2012)
+
+```
+
+
 ```{r}
 
 county_codes <- read_csv("Raw_Data/county_codes.csv") %>%
