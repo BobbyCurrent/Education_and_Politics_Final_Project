@@ -45,7 +45,10 @@ district_spending <- read_csv("Raw_Data/archive/districts.csv")
 presidential_elections <- read_csv("Raw_Data/countypres_2000-2016.csv") %>%
   mutate(vote_prop = (candidatevotes / totalvotes)) %>%
   mutate(percent_won = (vote_prop * 100)) %>%
-  filter(party %in% c("democrat", "republican"))
+  filter(party %in% c("democrat", "republican")) %>%
+  pivot_wider(id_cols = c(FIPS, year, state),
+              names_from = party,
+              values_from = c(percent_won, candidate))
   
   presidential_elections
 
@@ -145,21 +148,6 @@ spending_2004 <- read_csv("Raw_Data/district_spending_2004.csv",
   
 
 
-
-spending_2000 <- read_csv("Raw_Data/district_spending_2000.csv",
-                          col_types = cols(name = col_character(),
-                                           stname = col_character(),
-                                           stabbr = col_character())) %>%
-  clean_names() %>%
-  #select() %>%
-  mutate(year = 2000) %>%
-  mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
-  mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
-  mutate(percent_state = ((tstrev / totalrev) * 100))
-  
-
-
-
 spending_2016 <- read_csv("Raw_Data/district_spending_2016.csv", 
                           col_types = cols(name = col_character(),
                                            stname = col_character(),
@@ -180,22 +168,71 @@ spending_2016 <- read_csv("Raw_Data/district_spending_2016.csv",
   mutate(percent_state = ((tstrev / totalrev) * 100))
 
 
+
+joined_temp <- bind_rows(spending_2004, spending_2008, spending_2012, spending_2016)
+
+
+
+spending_2000 <- read_csv("Raw_Data/district_spending_2000.csv",
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+  clean_names() %>%
+  select(name, 
+         stname, 
+         stabbr, 
+         totalrev, 
+         totalexp, 
+         tlocrev, 
+         tstrev, 
+         tfedrev) %>%
+  left_join(joined_temp, by = "name") %>%
+  filter(!is.na(conum)) %>%
+  distinct(conum, .keep_all = TRUE) %>%
+  select(name, 
+         stname = stname.x, 
+         stabbr = stabbr.x, 
+         totalrev = totalrev.x, 
+         totalexp = totalexp.x, 
+         tlocrev = tlocrev.x, 
+         tstrev = tstrev.x, 
+         tfedrev = tfedrev.x,
+         conum) %>%
+  mutate(year = 2000) %>%
+  mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+  mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+  mutate(percent_state = ((tstrev / totalrev) * 100))
+  
+
+
 ```
 
 ```{r new joins}
 
-final_data <- full_join(spending_2004, spending_2008) %>%
-  full_join(spending_2012) %>%
-  full_join(spending_2016) %>%
-  left_join(presidential_elections, by = c("conum" = "FIPS"))
 
-final_data
+final_data <- bind_rows(joined_temp, spending_2000) %>%
+  left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
+
+
+```
+
+```{r plots}
+
+final_data %>%
+  filter(year == 2016) %>%
+  filter(stabbr == "MS") %>%
+  ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_x_log10()
 
 
 
 
 
 ```
+
+
 
 
 ```{r non fiscal stuff}
