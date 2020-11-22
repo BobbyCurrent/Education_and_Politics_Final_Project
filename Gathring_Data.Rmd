@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(janitor)
+library(rstanarm)
 ```
 
 ```{r}
@@ -219,16 +220,23 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
 ```{r plots}
 
 final_data %>%
-  filter(year == 2016) %>%
-  filter(stabbr == "MS") %>%
+  #filter(year == 2016) %>%
+  filter(stabbr == "TN") %>%
   ggplot(aes(x = totalexp, y = percent_won_democrat)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  scale_x_log10()
+  scale_x_log10() +
+  facet_wrap(~ year) +
+  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in US States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
 
 
 
 
+
+```
+
+
+```{r}
 
 ```
 
