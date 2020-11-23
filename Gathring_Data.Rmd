@@ -221,13 +221,13 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
 
 final_data %>%
   #filter(year == 2016) %>%
-  filter(stabbr == "TN") %>%
+  #filter(stabbr == "SC") %>%
   ggplot(aes(x = totalexp, y = percent_won_democrat)) +
   geom_point() +
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
-  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in US States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
+  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in United States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
 
 
 
@@ -237,6 +237,11 @@ final_data %>%
 
 
 ```{r}
+stan_glm(data = final_data,
+         formula = percent_won_democrat ~ tstrev + tlocrev,
+         refresh = 0) %>%
+
+print(digits = 5)
 
 ```
 

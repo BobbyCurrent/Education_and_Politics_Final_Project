@@ -21,7 +21,7 @@ theme = shinytheme("flatly"),
     # Application title
     tabPanel("About",
              p("Good Morning America", a("This is the link to my github.", href = "https://github.com/BobbyCurrent/Education_and_Politics_Final_Project")),
-             h1("Don't reelect the Orange"),
+             h1("Good Job America"),
              p("My project is about the possible correlation between the quality of K-12 education in America and political party affiliation.
                I want to see if states with better education systems tend to lean toward the Democratic or Republican party in both national and statewide elections.
                It is commonly said by the left that people with better education tend to vote for more Democratic candidates, but I want to see if this prediction is true.
