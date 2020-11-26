@@ -70,7 +70,7 @@ districts_and_counties <- left_join(district_spending, districts_by_county, by =
   mutate(NAME_COUNTY19 = str_replace(NAME_COUNTY19, "County", ""))
 
 
-left_join(districts_and_counties, presidential_elections, by = c("NAME_COUNTY19" = "county"))
+# left_join(districts_and_counties, presidential_elections, by = c("NAME_COUNTY19" = "county"))
 
 
 

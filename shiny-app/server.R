@@ -7,28 +7,151 @@
 #    http://shiny.rstudio.com/
 #
 
+presidential_elections <- read_csv("data/countypres_2000-2016.csv") %>%
+    mutate(vote_prop = (candidatevotes / totalvotes)) %>%
+    mutate(percent_won = (vote_prop * 100)) %>%
+    filter(party %in% c("democrat", "republican")) %>%
+    pivot_wider(id_cols = c(FIPS, year, state),
+                names_from = party,
+                values_from = c(percent_won, candidate))
 
-school_spending_2017_2018 <-
-    spending_data_2018 <-
-    read_excel("data/Stfis180_1a.xlsx") %>%
-    group_by(STNAME) %>%
-    select(STNAME, E11A)
+spending_2012 <- read_csv("data/district_spending_2011.csv", 
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+    clean_names() %>%
+    select(conum, 
+           name, 
+           stname, 
+           stabbr, 
+           totalrev,
+           totalexp, 
+           tlocrev, 
+           tstrev, 
+           tfedrev) %>%
+    mutate(year = 2012) %>%
+    mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+    mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+    mutate(percent_state = ((tstrev / totalrev) * 100))
+
+
+
+
+spending_2008 <- read_csv("data/district_spending_2008.csv",
+                          col_types = cols(name = col_character(), 
+                                           stname = col_character(), 
+                                           stabbr = col_character())) %>%
+    clean_names() %>%
+    select(conum, 
+           name, 
+           stname, 
+           stabbr, 
+           totalrev, 
+           totalexp, 
+           tlocrev,
+           tstrev, 
+           tfedrev) %>%
+    mutate(year = 2008) %>%
+    mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+    mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+    mutate(percent_state = ((tstrev / totalrev) * 100))
+
+
+
+spending_2004 <- read_csv("data/district_spending_2004.csv",
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+    clean_names() %>%
+    select(conum, 
+           name, 
+           stname, 
+           stabbr, 
+           totalrev, 
+           totalexp, 
+           tlocrev, 
+           tstrev, 
+           tfedrev) %>%
+    mutate(year = 2004) %>%
+    mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+    mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+    mutate(percent_state = ((tstrev / totalrev) * 100))
+
+
+
+spending_2016 <- read_csv("data/district_spending_2016.csv", 
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+    clean_names() %>%
+    select(conum,
+           name,
+           stname,
+           stabbr,
+           totalrev,
+           totalexp,
+           tlocrev,
+           tfedrev,
+           tstrev) %>%
+    mutate(year = 2016) %>%
+    mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+    mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+    mutate(percent_state = ((tstrev / totalrev) * 100))
+
+
+
+joined_temp <- bind_rows(spending_2004, spending_2008, spending_2012, spending_2016)
+
+
+
+spending_2000 <- read_csv("data/district_spending_2000.csv",
+                          col_types = cols(name = col_character(),
+                                           stname = col_character(),
+                                           stabbr = col_character())) %>%
+    clean_names() %>%
+    select(name, 
+           stname, 
+           stabbr, 
+           totalrev, 
+           totalexp, 
+           tlocrev, 
+           tstrev, 
+           tfedrev) %>%
+    left_join(joined_temp, by = "name") %>%
+    filter(!is.na(conum)) %>%
+    distinct(conum, .keep_all = TRUE) %>%
+    select(name, 
+           stname = stname.x, 
+           stabbr = stabbr.x, 
+           totalrev = totalrev.x, 
+           totalexp = totalexp.x, 
+           tlocrev = tlocrev.x, 
+           tstrev = tstrev.x, 
+           tfedrev = tfedrev.x,
+           conum) %>%
+    mutate(year = 2000) %>%
+    mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
+    mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
+    mutate(percent_state = ((tstrev / totalrev) * 100))
+
+
+final_data <- bind_rows(joined_temp, spending_2000) %>%
+    left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
+
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
     output$carPlot <- renderPlot({
-        school_spending_2017_2018 %>%
-            ggplot(aes(x = STNAME, y = E11A)) +
-            geom_col() +
-            labs(x = "State", 
-                 y = "Total Amount Paid", 
-                 title = "The Total Amount Paid to Teachers in 
-                 Regular Education Programs by State", 
-                 subtitle = "2017 - 2018 School Year") +
-            theme(axis.text.x = element_text(angle = 90, hjust = 1))
-    
-       
+        final_data %>%
+            #filter(year == 2016) %>%
+            #filter(stabbr == "SC") %>%
+            ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in United States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
     })
 
 })
