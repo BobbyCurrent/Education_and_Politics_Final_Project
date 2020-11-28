@@ -31,7 +31,27 @@ theme = shinytheme("flatly"),
     tabPanel("Presidential Elections by District",
              plotOutput("carPlot")
              
-    )
+    ),
+
+tabPanel("Election by Year and State",
+         sidebarLayout(
+             sidebarPanel(
+                 checkboxGroupInput("years",
+                                    "Presidential Election Year",
+                                    choices = list("2000" = 2000,
+                                               "2004" = 2004,
+                                               "2008" = 2008,
+                                               "2012" = 2012,
+                                               "2016" = 2016),
+                                    selected = 2000),
+                 textInput("state",
+                           "State Abbreviation",
+                           value = "AL")
+             ),
+             mainPanel(
+                 plotOutput("yearPlot")
+             )
+             ))
 
     
 ))

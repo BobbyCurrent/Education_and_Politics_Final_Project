@@ -151,7 +151,24 @@ shinyServer(function(input, output) {
             geom_smooth(method = "lm") +
             scale_x_log10() +
             facet_wrap(~ year) +
-            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in United States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "2000 to 2016 Presidential Elections", x = "Education Spending Per District", y = "Percent of vote for Democratic Candidate")
+    })
+    
+    output$yearPlot <- renderPlot({
+        p <- final_data %>%
+            filter(year == input$years) %>%
+            filter(stabbr == input$state) %>%
+            ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Presidential Elections Per Year and State", 
+                 x = "Education Spending Per District", 
+                 y = "Percent of vote for Democratic Candidate")
+        
+        p
     })
 
 })

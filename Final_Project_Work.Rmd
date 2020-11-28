@@ -153,7 +153,7 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
 
 
 
-```{r}
+```{r carPlot}
 
 final_data %>%
   #filter(year == 2016) %>%
@@ -163,7 +163,31 @@ final_data %>%
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
-  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in United States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
+  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+       subtitle = "Democratic vote share in United States since the 2000 election", 
+       x = "Education Spending Per District", 
+       y = "Percent of vote for Democratic Candidate")
+
+
+
+```
+
+```{r yearPlot}
+
+final_data %>%
+  filter(input$years) %>%
+  filter(stabbr == input$state) %>%
+  ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_x_log10() +
+  facet_wrap(~ year) +
+  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+       subtitle = "2000 to 2016 Presidential Elections", 
+       x = "Education Spending Per District", 
+       y = "Percent of vote for Democratic Candidate")
+
+
 
 
 
