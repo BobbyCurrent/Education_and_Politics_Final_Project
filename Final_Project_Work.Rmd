@@ -193,3 +193,26 @@ final_data %>%
 
 ```
 
+
+
+```{r stan}
+
+final_data_million <- 
+  final_data %>%
+  mutate(totalexp_mil = (totalexp / 1000000)) %>%
+  mutate(totalrev_mil = (totalrev / 1000000)) %>%
+  mutate(stname = toupper(stname))
+
+data_stan <- stan_glm(data = final_data_million,
+         formula = percent_won_democrat ~ per_capita_rev,
+         refresh = 0)
+
+print(data_stan, digits = 7)
+
+
+
+```
+
+
+
+

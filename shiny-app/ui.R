@@ -11,6 +11,7 @@ library(shiny)
 library(shinythemes)
 library(tidyverse)
 library(readxl)
+library(janitor)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage(

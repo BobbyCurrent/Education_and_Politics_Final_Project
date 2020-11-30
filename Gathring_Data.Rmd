@@ -98,7 +98,8 @@ spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv",
          totalexp, 
          tlocrev, 
          tstrev, 
-         tfedrev) %>%
+         tfedrev,
+         leaid) %>%
   mutate(year = 2012) %>%
   mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
   mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
@@ -120,7 +121,8 @@ spending_2008 <- read_csv("Raw_Data/district_spending_2008.csv",
          totalexp, 
          tlocrev,
          tstrev, 
-         tfedrev) %>%
+         tfedrev,
+         leaid) %>%
   mutate(year = 2008) %>%
   mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
   mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
@@ -141,19 +143,25 @@ spending_2004 <- read_csv("Raw_Data/district_spending_2004.csv",
          totalexp, 
          tlocrev, 
          tstrev, 
-         tfedrev) %>%
+         tfedrev,
+         leaid) %>%
   mutate(year = 2004) %>%
   mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
   mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
   mutate(percent_state = ((tstrev / totalrev) * 100))
   
-
+students_2016 <- read_csv("Raw_Data/membership_2016.csv",
+                          col_types = cols(TOTAL = col_double(),
+                                           LEAID = col_double())) %>%
+  clean_names() %>%
+  select(total, leaid)
 
 spending_2016 <- read_csv("Raw_Data/district_spending_2016.csv", 
                           col_types = cols(name = col_character(),
                                            stname = col_character(),
                                            stabbr = col_character())) %>%
   clean_names() %>%
+  left_join(students_2016, by = "leaid") %>%
   select(conum,
          name,
          stname,
@@ -162,11 +170,16 @@ spending_2016 <- read_csv("Raw_Data/district_spending_2016.csv",
          totalexp,
          tlocrev,
          tfedrev,
-         tstrev) %>%
+         tstrev,
+         leaid,
+         total_students = total) %>%
   mutate(year = 2016) %>%
   mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
   mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
-  mutate(percent_state = ((tstrev / totalrev) * 100))
+  mutate(percent_state = ((tstrev / totalrev) * 100)) %>%
+  filter(!is.na(total_students)) %>%
+  mutate(per_capita_rev = totalrev / total_students) %>%
+  filter(total_students > 0)
 
 
 
@@ -186,7 +199,8 @@ spending_2000 <- read_csv("Raw_Data/district_spending_2000.csv",
          totalexp, 
          tlocrev, 
          tstrev, 
-         tfedrev) %>%
+         tfedrev,
+         leaid) %>%
   left_join(joined_temp, by = "name") %>%
   filter(!is.na(conum)) %>%
   distinct(conum, .keep_all = TRUE) %>%
@@ -198,7 +212,8 @@ spending_2000 <- read_csv("Raw_Data/district_spending_2000.csv",
          tlocrev = tlocrev.x, 
          tstrev = tstrev.x, 
          tfedrev = tfedrev.x,
-         conum) %>%
+         conum,
+         leaid = leaid.x) %>%
   mutate(year = 2000) %>%
   mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
   mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
@@ -261,10 +276,14 @@ students_2012 <- read_csv("Raw_Data/non_fiscal_2012.csv") %>%
   select(conum, name, member) %>%
   mutate(year = 2012)
 
-
-
 # left_join(spending_2008, students_2008, by = "conum")
 
+
+students_2016 <- read_csv("Raw_Data/membership_2016.csv") %>%
+  clean_names() %>%
+  select(total)
+
+students_2016
 ```
 
 
