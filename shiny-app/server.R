@@ -151,7 +151,11 @@ shinyServer(function(input, output) {
             geom_smooth(method = "lm") +
             scale_x_log10() +
             facet_wrap(~ year) +
-            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "2000 to 2016 Presidential Elections", x = "Education Spending Per District", y = "Percent of vote for Democratic Candidate")
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "2000 to 2016 Presidential Elections", 
+                 x = "Education Spending Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
     })
     
     output$yearPlot <- renderPlot({
@@ -166,9 +170,46 @@ shinyServer(function(input, output) {
             labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
                  subtitle = "Presidential Elections Per Year and State", 
                  x = "Education Spending Per District", 
-                 y = "Percent of vote for Democratic Candidate")
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
         
         p
+    })
+    
+    output$virginiaPlot <- renderPlot({
+        final_data %>%
+            #filter(year == 2016) %>%
+            filter(stabbr == "VA") %>%
+            ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Democratic vote share in Virginia since the 2000 election", 
+                 x = "Education Spending Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+        
+        
+    })
+    
+    output$ohioPlot <- renderPlot({
+        final_data %>%
+            #filter(year == 2016) %>%
+            filter(stabbr == "OH") %>%
+            ggplot(aes(x = totalexp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Democratic vote share in Ohio since the 2000 election", 
+                 x = "Education Spending Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+        
+        
     })
 
 })
