@@ -206,7 +206,7 @@ shinyServer(function(input, output) {
     
     output$yearPlot <- renderPlot({
         p <- final_data %>%
-            filter(year == input$years) %>%
+            filter(year %in% input$years) %>%
             filter(stabbr == input$state) %>%
             ggplot(aes(x = totalexp, y = percent_won_democrat)) +
             geom_point() +
@@ -260,7 +260,7 @@ shinyServer(function(input, output) {
     
     output$capitaPlot <- renderPlot({
         final_data %>%
-            filter(year == input$years2) %>%
+            filter(year %in% input$years2) %>%
             filter(stabbr == input$state2) %>%
             ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
             geom_point() +
