@@ -22,17 +22,26 @@ theme = shinytheme("flatly"),
     # Application title
     tabPanel("About",
              h1("Education and Politics"),
+             
              p("My project is about the possible correlation between the quality of K-12 education in America and political party affiliation.
                I want to see if states with better funded education systems tend to lean toward the Democratic or Republican party in presidential elections.
                It is commonly said by the left that higher educated people tend to vote for more Democratic candidates, but I want to see if this claim is true.
                I will be looking at how much each school district spends on education and the percentage of their votes that went to the Democratic candidate in the 2000, 2004, 2008, 2012, and 2016 presidential elections."),
+             
              p("I got my data on presidential elections from the Harvard Dataverse.
                The link to that data is", a("here.", href = "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ"),
                "All the data I used about education funding and statistics came from the NCES (National Center for Education Statistics).
                The link to my education data is", a("here.", href = "https://nces.ed.gov/ccd/files.asp#Fiscal:2,LevelId:2,SchoolYearId:32,Page:1")),
+             
              p("The link to my git repository of this project is", a("here.", href = "https://github.com/BobbyCurrent/Education_and_Politics_Final_Project"),
                "This repository has record of how the project was created and has all of the background information in it.
-               It shows how the data was cleaned, how the graphs were made, and everything in between.")
+               It shows how the data was cleaned, how the graphs were made, and everything in between."),
+             
+             h2("About Me"),
+             
+             p("My name is Bobby Current and I am a first year student at Harvard College.
+               My concentration will most likely either be government or history, with one of them possibly being a secondary.
+               You can reach me at my email, bobby_current@college.harvard.edu.")
              
              ),
 
@@ -87,6 +96,7 @@ tabPanel("Election by Year and State",
            This changes in 2008, however, where there is suddenly a clear trend that the more a district spends on education, the more they voted for a Democratic candidate.
            This makes Virginia an interesting example of how education spending may have impacted voting in these districts, with no correlation being there when the state went red and a strong one being there when the state went blue.
            This could simply just be down to more people voting for Democrats in those elections too though."),
+         
              mainPanel(
                  plotOutput("ohioPlot")
              ),
@@ -96,7 +106,36 @@ tabPanel("Election by Year and State",
            This means that the districts that spend the most amount of money on education do not tend to favor Democrats, which goes directly against the claim that areas with better funded education systems tend to vote for the left.
            As this is looking at the total amount of money spent instead of the amount spent per student, it is impossible to tell if the graph would look the same if the quality of education were considered instead of just the raw funding.")
          
+             ),
+
+tabPanel("Vote Share Per Capita",
+         sidebarLayout(
+             sidebarPanel(
+                 checkboxGroupInput("years2",
+                                    "Election Year",
+                                    choices = list("2008" = 2008,
+                                                   "2012" = 2012,
+                                                   "2016" = 2016),
+                                    selected = 2008),
+                 textInput("state2",
+                           "State Abbreviation",
+                           value = "AL")
+             ),
+             mainPanel(
+                 plotOutput("capitaPlot")
              )
+             ),
+             p("This plot is looks at the possible correlations between the amount spent on education per district and the percentage of the vote that Democrats win.
+               This graph is a lot better than the ones looking at total spending because the spending per capita can better indicate the quality of education instead of the size of a school disrict."),
+             
+             mainPanel(
+                 plotOutput("nationalPlot")
+             ),
+         p("This is the version of the spending per capita graph.
+           It can be seen that the spending per capita of the different school districts is more similar than their total spending, likely because of the difference in district sizes.
+           The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.")
+    
+)
 
 
     

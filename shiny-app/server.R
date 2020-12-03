@@ -15,11 +15,18 @@ presidential_elections <- read_csv("data/countypres_2000-2016.csv") %>%
                 names_from = party,
                 values_from = c(percent_won, candidate))
 
+students_2012 <- read_csv("data/non_fiscal_2012.csv", 
+                          col_types = cols(MEMBER = col_double(),
+                                           LEAID = col_double())) %>%
+    clean_names() %>%
+    select(member, leaid) 
+
 spending_2012 <- read_csv("data/district_spending_2011.csv", 
                           col_types = cols(name = col_character(),
                                            stname = col_character(),
                                            stabbr = col_character())) %>%
     clean_names() %>%
+    left_join(students_2012, by = "leaid") %>%
     select(conum, 
            name, 
            stname, 
@@ -28,20 +35,32 @@ spending_2012 <- read_csv("data/district_spending_2011.csv",
            totalexp, 
            tlocrev, 
            tstrev, 
-           tfedrev) %>%
+           tfedrev,
+           leaid,
+           total_students = member) %>%
     mutate(year = 2012) %>%
     mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
     mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
-    mutate(percent_state = ((tstrev / totalrev) * 100))
+    mutate(percent_state = ((tstrev / totalrev) * 100)) %>%
+    filter(!is.na(total_students)) %>%
+    mutate(per_capita_rev = (totalrev / total_students)) %>%
+    filter(total_students > 0) %>%
+    mutate(per_capita_exp = (totalrev / total_students))
 
 
 
+students_2008 <- read_csv("data/non_fiscal_2008.csv", 
+                          col_types = cols(PK1207 = col_double(),
+                                           LEAID = col_double())) %>%
+    clean_names() %>%
+    select(pk1207, leaid)
 
 spending_2008 <- read_csv("data/district_spending_2008.csv",
                           col_types = cols(name = col_character(), 
                                            stname = col_character(), 
                                            stabbr = col_character())) %>%
     clean_names() %>%
+    left_join(students_2008, by = "leaid") %>%
     select(conum, 
            name, 
            stname, 
@@ -50,11 +69,18 @@ spending_2008 <- read_csv("data/district_spending_2008.csv",
            totalexp, 
            tlocrev,
            tstrev, 
-           tfedrev) %>%
+           tfedrev,
+           leaid,
+           total_students = pk1207) %>%
     mutate(year = 2008) %>%
     mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
     mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
-    mutate(percent_state = ((tstrev / totalrev) * 100))
+    mutate(percent_state = ((tstrev / totalrev) * 100)) %>%
+    filter(!is.na(total_students)) %>%
+    mutate(per_capita_rev = (totalrev / total_students)) %>%
+    filter(total_students > 0) %>%
+    mutate(per_capita_exp = (totalrev / total_students))
+
 
 
 
@@ -71,7 +97,8 @@ spending_2004 <- read_csv("data/district_spending_2004.csv",
            totalexp, 
            tlocrev, 
            tstrev, 
-           tfedrev) %>%
+           tfedrev,
+           leaid) %>%
     mutate(year = 2004) %>%
     mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
     mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
@@ -79,11 +106,18 @@ spending_2004 <- read_csv("data/district_spending_2004.csv",
 
 
 
+students_2016 <- read_csv("data/membership_2016.csv",
+                          col_types = cols(TOTAL = col_double(),
+                                           LEAID = col_double())) %>%
+    clean_names() %>%
+    select(total, leaid)
+
 spending_2016 <- read_csv("data/district_spending_2016.csv", 
                           col_types = cols(name = col_character(),
                                            stname = col_character(),
                                            stabbr = col_character())) %>%
     clean_names() %>%
+    left_join(students_2016, by = "leaid") %>%
     select(conum,
            name,
            stname,
@@ -92,11 +126,17 @@ spending_2016 <- read_csv("data/district_spending_2016.csv",
            totalexp,
            tlocrev,
            tfedrev,
-           tstrev) %>%
+           tstrev,
+           leaid,
+           total_students = total) %>%
     mutate(year = 2016) %>%
     mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
     mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
-    mutate(percent_state = ((tstrev / totalrev) * 100))
+    mutate(percent_state = ((tstrev / totalrev) * 100)) %>%
+    filter(!is.na(total_students)) %>%
+    mutate(per_capita_rev = totalrev / total_students) %>%
+    filter(total_students > 0) %>%
+    mutate(per_capita_exp = (totalrev / total_students))
 
 
 
@@ -116,7 +156,8 @@ spending_2000 <- read_csv("data/district_spending_2000.csv",
            totalexp, 
            tlocrev, 
            tstrev, 
-           tfedrev) %>%
+           tfedrev,
+           leaid) %>%
     left_join(joined_temp, by = "name") %>%
     filter(!is.na(conum)) %>%
     distinct(conum, .keep_all = TRUE) %>%
@@ -128,15 +169,20 @@ spending_2000 <- read_csv("data/district_spending_2000.csv",
            tlocrev = tlocrev.x, 
            tstrev = tstrev.x, 
            tfedrev = tfedrev.x,
-           conum) %>%
+           conum,
+           leaid = leaid.x) %>%
     mutate(year = 2000) %>%
     mutate(percent_local = ((tlocrev / totalrev) * 100)) %>%
     mutate(percent_federal = ((tfedrev / totalrev) * 100)) %>%
     mutate(percent_state = ((tstrev / totalrev) * 100))
 
 
+
 final_data <- bind_rows(joined_temp, spending_2000) %>%
     left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
+
+
+
 
 
 # Define server logic required to draw a histogram
@@ -211,5 +257,38 @@ shinyServer(function(input, output) {
         
         
     })
+    
+    output$capitaPlot <- renderPlot({
+        final_data %>%
+            filter(year == input$years2) %>%
+            filter(stabbr == input$state2) %>%
+            ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections",
+                 x = "Education Spending Per Student Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+    })
+    
+    output$nationalPlot <- renderPlot({
+        final_data %>%
+            filter(year %in% c(2008, 2012, 2016)) %>%
+            ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Democratic vote share in United States since the 2008 election", 
+                 x = "Education Spending Per Student Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+    })
+    
+    
+    
 
 })

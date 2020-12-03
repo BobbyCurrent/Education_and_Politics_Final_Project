@@ -241,5 +241,24 @@ print(data_stan, digits = 7)
 ```
 
 
+```{r}
+final_data %>%
+  filter(year %in% c(2008, 2012, 2016)) %>%
+  ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_x_log10() +
+  facet_wrap(~ year) +
+  labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+       subtitle = "Democratic vote share in United States since the 2008 election", 
+       x = "Education Spending Per Student Per District", 
+       y = "Percent of vote for Democratic Candidate") +
+  theme_bw()
+
+
+
+
+
+```
 
 
