@@ -270,13 +270,23 @@ final_data_million <-
   mutate(totalrev_mil = (totalrev / 1000000)) %>%
   #mutate(strev_mil = (strev / 1000000)) %>%
   mutate(stname = toupper(stname)) %>%
-  mutate(per_capita_rev = (per_capita_rev / 1000))
+  mutate(per_capita_rev_mil = (per_capita_rev / 1000)) %>%
+  mutate(per_capita_exp_mil = (per_capita_exp / 1000))
 
 data_stan <- stan_glm(data = final_data_million,
-         formula = percent_won_democrat ~ per_capita_rev,
-         refresh = 0)
+                      formula = percent_won_democrat ~ total_students + per_capita_rev_mil + per_capita_exp_mil + total_students:per_capita_rev_mil + total_students:per_capita_exp_mil,
+                      refresh = 0)
 
 print(data_stan, digits = 7)
+
+
+other_stan <- stan_glm(data = final_data_million,
+         formula = percent_won_democrat ~ per_capita_exp_mil:per_capita_rev_mil + total_students,
+         refresh = 0)
+
+print(other_stan, digits = 9)
+
+
 
 
 
@@ -289,7 +299,7 @@ final_data %>%
   ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
   geom_point(alpha = 0.3) +
   geom_smooth(method = "lm") +
-  #scale_x_log10() +
+  scale_x_log10() +
   facet_wrap(~ year) +
   labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
        subtitle = "Democratic vote share in United States since the 2008 election", 
