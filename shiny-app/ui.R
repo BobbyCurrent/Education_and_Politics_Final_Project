@@ -143,14 +143,14 @@ tabPanel("Vote Share Per Capita",
          mainPanel(
              plotOutput("californiaPlot")
          ),
-         p("This is the California spending per capita plot.
+         p("The first graph to the left is the California spending per capita plot.
            It is interesting because it shows that California, a safe Democrat state, does not have much of a correlation between spending and Democratic vote share.
            This could be because Californians tend to vote blue on such a scale that the actual amount of money schools get per student does not matter for presidential elections, or it could show that there is little to no correlation between school funding and voting patterns."),
          
          mainPanel(
              plotOutput("texasPlot")
          ),
-         p("This is the Texas spending per capita plot.
+         p("The second graph is the Texas spending per capita plot.
            Something notable about this plot is that while the line appears to show a negative correlation between Democratic vote share and per capita school spending, the actual points reveal no such thing.
            The points are clustered around one area on the x-axis, which means that Texas school districts tend to spend about the same amount on education for each student.
            With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party."),
@@ -158,7 +158,7 @@ tabPanel("Vote Share Per Capita",
              mainPanel(
                  plotOutput("nationalPlot")
              ),
-         p("This is the national version of the spending per capita graph.
+         p("The third graph to the left is the national version of the spending per capita graph.
            It can be seen that the spending per capita of the different school districts is more similar than their total spending, likely because of the difference in district sizes.
            The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.
            Looks can be quite decieving, however, as the actual points of the graph tell otherwise.
@@ -177,11 +177,13 @@ tabPanel("Analysis",
          p("This table shows the mathematical effect the amount of students, the per capita revenue, and the per capita expenditure has on Demcratic vote share.
            The intercept is the Democratic vote share.
            This means that, without the amount of students or per capita spending being considered, Democrats get an average of 44% of the popular vote in school districts.
-           This makes sense, as more states vote Republican over Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside.
-           total_students denotates the total amount of students in the individual school district.
+           This makes sense, as more states vote Republican over Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside."),
+          
+           p("The variable 'total_students' denotates the total amount of students in the individual school district.
            When the amount of students are considered, the Democratic vote share increases by 0.00013.
-           This increase is negligible, as it has no real impact on the amount of votes Democrats get.
-           The variable per_capita_exp_mil*per_capita_rev_mil is the interaction term.
+           This increase is negligible, as it has no real impact on the amount of votes Democrats get."),
+           
+           p("The variable 'per_capita_exp_mil*per_capita_rev_mil' is the interaction term.
            It shows the impact of including both the per capita revenue and spending on voting patterns.
            This impact, a 0.00000006 change to the intercept, is also negligible, as it has even less of an effect than the amount of students did on voting patterns."),
          
@@ -189,6 +191,7 @@ tabPanel("Analysis",
     
 ),
 
+#Panel for final thoughts and results
 
 tabPanel("Conclusions",
          h1("Results"),
