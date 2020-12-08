@@ -11,6 +11,9 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 library(rstanarm)
+library(gt)
+library(broom.mixed)
+library(gtsummary)
 ```
 
 ```{r}

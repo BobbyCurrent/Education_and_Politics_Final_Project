@@ -12,6 +12,10 @@ library(shinythemes)
 library(tidyverse)
 library(readxl)
 library(janitor)
+library(gtsummary)
+library(gt)
+library(broom.mixed)
+library(rstanarm)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage(
@@ -20,13 +24,15 @@ theme = shinytheme("flatly"),
 "Education and Political Leaning",
     
     # Application title
+
     tabPanel("About",
              h1("Education and Politics"),
              
-             p("My project is about the possible correlation between the quality of K-12 education in America and political party affiliation.
+             p("My project is about the possible correlation between the amount of money spent on K-12 education in America and voting patterns.
                I want to see if states with better funded education systems tend to lean toward the Democratic or Republican party in presidential elections.
-               It is commonly said by the left that higher educated people tend to vote for more Democratic candidates, but I want to see if this claim is true.
-               I will be looking at how much each school district spends on education and the percentage of their votes that went to the Democratic candidate in the 2000, 2004, 2008, 2012, and 2016 presidential elections."),
+               It is commonly said by the left that higher educated people tend to vote for more Democratic candidates, while less educated people tend to vote for Republicans.
+               While this is a very partisan claim, I wanted to see if there was any truth to the statement.
+               To do this, I will be looking at how much each school district spends on education and the percentage of their votes that went to the Democratic candidate in the 2000, 2004, 2008, 2012, and 2016 presidential elections."),
              
              p("I got my data on presidential elections from the Harvard Dataverse.
                The link to that data is", a("here.", href = "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VOQCHQ"),
@@ -45,6 +51,8 @@ theme = shinytheme("flatly"),
              
              ),
 
+#Panel for first graph: raw spending national plot
+
     tabPanel("Presidential Elections by District",
              plotOutput("carPlot"),
              h1("Interpretation"),
@@ -52,13 +60,15 @@ theme = shinytheme("flatly"),
                The line helps reveal the correlation that, as a trend, districts that spend more money on education tend to vote more for Democrats that Republicans in Presidential elections.
                It an be seen with each election from 2000 to 2016 that this trend tends to be the same across the board."),
              
-               p("One important disticntion that must be made is that these graphs are looking at the raw amount of money spent.
-               This means that the graphs are actually comparing large and small school systems more so than the amount of money actually being spent per student, which would indicate the quality of education.
+               p("One important disticntion that must be made is that these graphs are looking at the raw amount of money spent, not spending per capita.
+               This means that the graphs are likely comparing large and small school systems instead of the amount of money actually being spent per student, which is a better indicator for education funding.
                With this in mind, the graph tells us that larger school systems, likely from states such as California and New York, are more likely to vote Democratic than smaller ones, which are more likely to be from states like Mississippi and Wyoming.
                Beyond a state divide, this could also speak to an urban rural divide, as urban areas are more likely to have larger school sysyems than rural ones, resutling in more money being spent in urban areas with the same quality of education as a rural area that spends less.
                Since urban areas are more likely to vote for Democrats, this trend makes sense.")
              
     ),
+
+#Panel for raw spending interactive plot
 
 tabPanel("Election by Year and State",
          sidebarLayout(
@@ -81,7 +91,7 @@ tabPanel("Election by Year and State",
              ),
              p("These graphs let you see the possible correlation between school funding and the Democratic vote share across five presidential elections in any state in the union and the District of Columbia.
                Each state will look a little different across time, so the states of Virginia and Ohio have been given as examples below with their interpretations.
-               It sohlud be noted that there is less data for the 2000 school year, as either less districts were inclined to report their information that year or there were less districts to report that information in the first place, if not some combination of the two.
+               It should be noted that there is less data for the 2000 school year, as either less districts were inclined to report their information that year or there were less districts to report that information in the first place, if not some combination of the two.
                This means that the trends shown for the 2000 election should be taken with a grain of salt, as they are not as exact as the ones created from later elections."),
          
              mainPanel(
@@ -102,11 +112,13 @@ tabPanel("Election by Year and State",
              ),
          p("This plot looks at Ohio across different elections, with a negative trend existing for this state.
            What is interesting is that, while Ohio voted for George Bush in 2000 and 2004, the state voted for Barack Obama in 2008 and 2012.
-           This means that, wven while the state went to the Democratic Party, there was a clear negative correlation between the amount of raw dollars being spent on education and the percentage of the vote that Democrats get.
+           This means that, while the state went to the Democratic Party, there was a clear negative correlation between the amount of raw dollars being spent on education and the percentage of the vote that Democrats get.
            This means that the districts that spend the most amount of money on education do not tend to favor Democrats, which goes directly against the claim that areas with better funded education systems tend to vote for the left.
-           As this is looking at the total amount of money spent instead of the amount spent per student, it is impossible to tell if the graph would look the same if the quality of education were considered instead of just the raw funding.")
+           As this is looking at the total amount of money spent instead of the amount spent per student, it is impossible to tell if the graph would look the same if the relative amount spent were considered instead of just the raw funding.")
          
              ),
+
+#Panel for per capita spending interactive plot
 
 tabPanel("Vote Share Per Capita",
          sidebarLayout(
@@ -126,14 +138,73 @@ tabPanel("Vote Share Per Capita",
              )
              ),
              p("This plot is looks at the possible correlations between the amount spent on education per district and the percentage of the vote that Democrats win.
-               This graph is a lot better than the ones looking at total spending because the spending per capita can better indicate the quality of education instead of the size of a school disrict."),
+               This graph is a lot better than the ones looking at total spending because the spending per capita can better indicate the relative amount spent on education instead of the size of a school disrict."),
+         
+         mainPanel(
+             plotOutput("californiaPlot")
+         ),
+         p("This is the California spending per capita plot.
+           It is interesting because it shows that California, a safe Democrat state, does not have much of a correlation between spending and Democratic vote share.
+           This could be because Californians tend to vote blue on such a scale that the actual amount of money schools get per student does not matter for presidential elections, or it could show that there is little to no correlation between school funding and voting patterns."),
+         
+         mainPanel(
+             plotOutput("texasPlot")
+         ),
+         p("This is the Texas spending per capita plot.
+           Something notable about this plot is that while the line appears to show a negative correlation between Democratic vote share and per capita school spending, the actual points reveal no such thing.
+           The points are clustered around one area on the x-axis, which means that Texas school districts tend to spend about the same amount on education for each student.
+           With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party."),
              
              mainPanel(
                  plotOutput("nationalPlot")
              ),
-         p("This is the version of the spending per capita graph.
+         p("This is the national version of the spending per capita graph.
            It can be seen that the spending per capita of the different school districts is more similar than their total spending, likely because of the difference in district sizes.
-           The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.")
+           The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.
+           Looks can be quite decieving, however, as the actual points of the graph tell otherwise.
+           With the points bein g clustered around one area on the x-axis, it seems that school districts across the country tend to spend around the same amount of money per student on average.
+           With this being the case, it is impossible for there to be nearly as strong a correlation as the line would suggest.
+           The reality is that the line is created using the outlier data, as the graph tries really hard to make it in the first place.")
+    
+),
+
+#Panel for table and interpretation
+
+tabPanel("Analysis",
+         mainPanel(
+             gt_output("stanPrint")
+         ),
+         p("This table shows the mathematical effect the amount of students, the per capita revenue, and the per capita expenditure has on Demcratic vote share.
+           The intercept is the Democratic vote share.
+           This means that, without the amount of students or per capita spending being considered, Democrats get an average of 44% of the popular vote in school districts.
+           This makes sense, as more states vote Republican over Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside.
+           total_students denotates the total amount of students in the individual school district.
+           When the amount of students are considered, the Democratic vote share increases by 0.00013.
+           This increase is negligible, as it has no real impact on the amount of votes Democrats get.
+           The variable per_capita_exp_mil*per_capita_rev_mil is the interaction term.
+           It shows the impact of including both the per capita revenue and spending on voting patterns.
+           This impact, a 0.00000006 change to the intercept, is also negligible, as it has even less of an effect than the amount of students did on voting patterns."),
+         
+         p("Taken as a whole, it seems that neither the amount of students nor the total revenue or spending per student has a real effect on Democratic vote share in presidential elections.")
+    
+),
+
+
+tabPanel("Conclusions",
+         h1("Results"),
+         
+         p("With everything taken as a whole, it seems that school spending does not have much of an impact on voting patterns in America.
+           With the per capita spending, which is the best way to show education funding, showing no correlation between higher spending and an increased Democratic vote share, it seems that voting patterns are not effected by education funding alone.
+           This means that the claim that the more education funding leads to more votes for Democrats is false, as is any claim that less education spending favors Republicans.
+           Based on the data collected, there is no correlation between spending and voting patterns whatsoever."),
+         
+         h2("Further Study"),
+         
+         p("Even though education funding does not have much of an effect on voting patterns, it has been shown in exit polls that people with higher levels of education tend to vote more to the left than the right.
+           If one wanted to look more into the impact education has on voting patterns, it would be better to look at the quality of education rather than its funding.
+           It has been shown that funding does not have much of an effect on the quality of education beyond a certain point, so other factors would have to be examined in further study.
+           This could be anything from standardized test scores and  the amount of extra curriculars to the length of the school day.
+           Those factors would likely give a better approximation of the quality of k-12 education than spending does.")
     
 )
 

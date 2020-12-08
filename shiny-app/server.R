@@ -182,8 +182,22 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
     left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
 
 
+final_data_million <- 
+    final_data %>%
+    filter(year %in% c(2008, 2012, 2016)) %>%
+    mutate(totalexp_mil = (totalexp / 1000000)) %>%
+    mutate(totalrev_mil = (totalrev / 1000000)) %>%
+    mutate(tstrev_mil = (tstrev / 1000000)) %>%
+    mutate(stname = toupper(stname)) %>%
+    mutate(per_capita_rev_mil = (per_capita_rev / 1000)) %>%
+    mutate(per_capita_exp_mil = (per_capita_exp / 1000))
 
 
+other_stan <- stan_glm(data = final_data_million,
+                       formula = percent_won_democrat ~ 
+                           per_capita_exp_mil:per_capita_rev_mil + 
+                           total_students,
+                       refresh = 0)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -283,6 +297,53 @@ shinyServer(function(input, output) {
             facet_wrap(~ year) +
             labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
                  subtitle = "Democratic vote share in United States since the 2008 election", 
+                 x = "Education Spending Per Student Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+    })
+    
+    
+    output$stanPrint <- render_gt({
+        other_stan %>%
+            tbl_regression(intercept = TRUE,
+                           exponentiate = TRUE,
+                           estimate_fun = function(other_stan)
+                               style_sigfig(other_stan, digits = 9)) %>%
+            as_gt() %>%
+            tab_header(subtitle = "Effect of Total Students and School Spending on Democratic Vote Share",
+                       title = "Regression of Democratic Vote Share in Presidential Elections")
+        
+    })
+    
+    
+    output$californiaPlot <- renderPlot({
+        final_data %>%
+            filter(year %in% c(2008, 2012, 2016)) %>%
+            filter(stabbr == "CA") %>%
+            ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Democratic vote share in California since the 2008 election", 
+                 x = "Education Spending Per Student Per District", 
+                 y = "Percent of vote for Democratic Candidate") +
+            theme_bw()
+    })
+    
+    
+    output$texasPlot <- renderPlot({
+        final_data %>%
+            filter(year %in% c(2008, 2012, 2016)) %>%
+            filter(stabbr == "TX") %>%
+            ggplot(aes(x = per_capita_exp, y = percent_won_democrat)) +
+            geom_point() +
+            geom_smooth(method = "lm") +
+            scale_x_log10() +
+            facet_wrap(~ year) +
+            labs(title = "School Spending and Democratic Vote Share in Presidential Elections", 
+                 subtitle = "Democratic vote share in Texas since the 2008 election", 
                  x = "Education Spending Per Student Per District", 
                  y = "Percent of vote for Democratic Candidate") +
             theme_bw()
