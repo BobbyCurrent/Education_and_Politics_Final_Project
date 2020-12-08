@@ -54,7 +54,13 @@ theme = shinytheme("flatly"),
 #Panel for first graph: raw spending national plot
 
     tabPanel("Presidential Elections by District",
-             plotOutput("carPlot"),
+             
+#Almost forgot to have mainPanel there
+             
+             mainPanel(
+                 plotOutput("carPlot")
+                 ),
+             
              h1("Interpretation"),
              p("These graphs have the amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
                The line helps reveal the correlation that, as a trend, districts that spend more money on education tend to vote more for Democrats that Republicans in Presidential elections.
@@ -73,6 +79,9 @@ theme = shinytheme("flatly"),
 tabPanel("Election by Year and State",
          sidebarLayout(
              sidebarPanel(
+                 
+#This part gives it a checkbox with the years
+                 
                  checkboxGroupInput("years",
                                     "Presidential Election Year",
                                     choices = list("2000" = 2000,
@@ -81,6 +90,9 @@ tabPanel("Election by Year and State",
                                                "2012" = 2012,
                                                "2016" = 2016),
                                     selected = 2000),
+                 
+# This part allows for the state name to be put in
+                 
                  textInput("state",
                            "State Abbreviation",
                            value = "AL")

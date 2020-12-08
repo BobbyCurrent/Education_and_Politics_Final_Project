@@ -250,7 +250,7 @@ final_data %>%
   #filter(year == 2016) %>%
   filter(stabbr == "OH") %>%
   ggplot(aes(x = totalexp, y = percent_won_democrat)) +
-  geom_point(alpha = 0.3) +
+  geom_point() +
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
