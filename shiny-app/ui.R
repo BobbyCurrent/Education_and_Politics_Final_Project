@@ -106,6 +106,7 @@ tabPanel("Election by Year and State",
                It should be noted that there is less data for the 2000 school year, as either less districts were inclined to report their information that year or there were less districts to report that information in the first place, if not some combination of the two.
                This means that the trends shown for the 2000 election should be taken with a grain of salt, as they are not as exact as the ones created from later elections."),
          
+            h1("Examples"),
              mainPanel(
                  plotOutput("virginiaPlot")
              ),
@@ -152,6 +153,7 @@ tabPanel("Vote Share Per Capita",
              p("This plot is looks at the possible correlations between the amount spent on education per district and the percentage of the vote that Democrats win.
                This graph is a lot better than the ones looking at total spending because the spending per capita can better indicate the relative amount spent on education instead of the size of a school disrict."),
          
+         h1("Examples"),
          mainPanel(
              plotOutput("californiaPlot")
          ),
@@ -167,6 +169,7 @@ tabPanel("Vote Share Per Capita",
            The points are clustered around one area on the x-axis, which means that Texas school districts tend to spend about the same amount on education for each student.
            With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party."),
              
+         h2("Capita Spending National Plot"),
              mainPanel(
                  plotOutput("nationalPlot")
              ),
