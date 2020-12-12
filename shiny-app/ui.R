@@ -61,7 +61,7 @@ theme = shinytheme("flatly"),
                  plotOutput("carPlot")
                  ),
              
-             p("These graphs have the total amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
+             p("The graph to the left has the total amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
                The line helps reveal the correlation that, as a trend, districts that spend more money on education tend to vote more for Democrats that Republicans in Presidential elections.
                It an be seen with each election from 2000 to 2016 that this trend tends to be the same across the board."),
              
