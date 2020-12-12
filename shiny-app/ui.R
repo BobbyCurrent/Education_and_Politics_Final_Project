@@ -26,7 +26,7 @@ theme = shinytheme("flatly"),
     # Application title
 
     tabPanel("About",
-             h1("Education and Politics"),
+             h1("Can Education Spending Influence Voting Patterns?"),
              
              p("My project is about the possible correlation between the amount of money spent on K-12 education in America and voting patterns.
                I want to see if states with better funded education systems tend to lean toward the Democratic or Republican party in presidential elections.

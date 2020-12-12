@@ -304,6 +304,7 @@ total_stan <- stan_glm(data = final_data_million,
 print(total_stan, digits = 9)
 
 
+
 ```
 
 
