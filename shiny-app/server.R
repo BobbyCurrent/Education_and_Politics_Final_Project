@@ -185,18 +185,21 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
 final_data_million <- 
     final_data %>%
     filter(year %in% c(2008, 2012, 2016)) %>%
-    mutate(totalexp_mil = (totalexp / 1000000)) %>%
-    mutate(totalrev_mil = (totalrev / 1000000)) %>%
-    mutate(tstrev_mil = (tstrev / 1000000)) %>%
+    mutate(Total_Expenditure = (totalexp / 1000000)) %>%
+    mutate(Total_Revenue = (totalrev / 1000000)) %>%
+    mutate(Total_State_Revenue = (tstrev / 1000000)) %>%
     mutate(stname = toupper(stname)) %>%
-    mutate(per_capita_rev_mil = (per_capita_rev / 1000)) %>%
-    mutate(per_capita_exp_mil = (per_capita_exp / 1000))
-
+    mutate(Per_Capita_Revenue = (per_capita_rev / 1000)) %>%
+    mutate(Per_Capita_Expenditure = (per_capita_exp / 1000)) %>%
+    mutate(Total_Students = total_students)
 
 other_stan <- stan_glm(data = final_data_million,
-                       formula = percent_won_democrat ~ 
-                           per_capita_exp_mil:per_capita_rev_mil + 
-                           total_students,
+                       formula = percent_won_democrat ~ Per_Capita_Expenditure:Per_Capita_Revenue 
+                       + Total_Students,
+                       refresh = 0)
+
+total_stan <- stan_glm(data = final_data_million,
+                       formula = percent_won_democrat ~ Total_Revenue + Total_Expenditure,
                        refresh = 0)
 
 # Define server logic required to draw a histogram
@@ -349,6 +352,19 @@ shinyServer(function(input, output) {
             theme_bw()
     })
     
+    
+    output$totalPrint <- render_gt({
+        total_stan %>%
+            tbl_regression(intercept = TRUE,
+                           exponentiate = TRUE,
+                           estimate_fun = function(total_stan)
+                               style_sigfig(total_stan, digits = 9)) %>%
+            as_gt() %>%
+            tab_header(subtitle = "Effect of School Spending on 
+             Democratic Vote Share",
+                       title = "Regression of Democratic Vote Share in Presidential 
+             Elections")
+    })
     
     
 

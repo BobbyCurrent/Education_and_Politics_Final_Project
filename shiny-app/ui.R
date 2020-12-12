@@ -26,7 +26,7 @@ theme = shinytheme("flatly"),
     # Application title
 
     tabPanel("About",
-             h1("Can Education Spending Influence Voting Patterns?"),
+             h1("Partisan Spending"),
              
              p("My project is about the possible correlation between the amount of money spent on K-12 education in America and voting patterns.
                I want to see if states with better funded education systems tend to lean toward the Democratic or Republican party in presidential elections.
@@ -186,23 +186,36 @@ tabPanel("Vote Share Per Capita",
 #Panel for table and interpretation
 
 tabPanel("Analysis",
+         h1("Spending Per Student"),
          mainPanel(
              gt_output("stanPrint")
          ),
-         p("This table shows the mathematical effect the amount of students, the per capita revenue, and the per capita expenditure has on Demcratic vote share.
+         p("This table predicts the mathematical effect the amount of students, the per capita revenue, and the per capita expenditure has on Demcratic vote share.
            The intercept is the Democratic vote share.
-           This means that, without the amount of students or per capita spending being considered, Democrats get an average of 44% of the popular vote in school districts.
-           This makes sense, as more states vote Republican over Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside."),
+           This means that, without the amount of students or per capita spending being considered, Democrats are predicted to win an average of 44% of the popular vote in school districts.
+           This makes sense, as more states vote Republican than Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside."),
           
-           p("The variable 'total_students' denotates the total amount of students in the individual school district.
-           When the amount of students are considered, the Democratic vote share increases by 0.00013.
+           p("The variable 'Total_Students' denotates the total amount of students in the individual school district.
+           When the amount of students are considered, the Democratic vote share is predicted to increase by 0.00013 percent.
            This increase is negligible, as it has no real impact on the amount of votes Democrats get."),
            
-           p("The variable 'per_capita_exp_mil*per_capita_rev_mil' is the interaction term.
+           p("The variable 'Per_Capita_Expenditure*Per_Capita_Revenue' is the interaction term.
            It shows the impact of including both the per capita revenue and spending on voting patterns.
-           This impact, a 0.00000006 change to the intercept, is also negligible, as it has even less of an effect than the amount of students did on voting patterns."),
+           This impact, a 0.00000006 percent change to the intercept, is also negligible, as it has even less of a predicted effect than the amount of students did on voting patterns."),
+        
+         #Added another plot, and some headers
          
-         p("Taken as a whole, it seems that neither the amount of students nor the total revenue or spending per student has a real effect on Democratic vote share in presidential elections.")
+          h1("Total Spending"),
+         mainPanel(
+             gt_output("totalPrint")
+         ),
+         p("As with the table above, there is little to no effect of school spending on voting patterns. 
+         The Intercept is still the Democratic Vote Share in presidential elections, and the variables changed from the spending per captia to the total spending, with the amount ot students not being  factor.
+         It can be seen that the total spending and revenue both have a negligible influence on Democratic vote share.
+         The table predicts that the Democrats only get 0.0446 percent more of the vote when school revenue is considered and they lose 0.0319 percent of the vote when the spending is considered.
+         This means that there is little to no effect of total school spending and revenue on voting patterns in America."),
+         
+         p("Taken as a whole, it seems that neither the amount of students, the total revenue nor spending per student is predicted to have an effect on Democratic vote share in presidential elections.")
     
 ),
 
