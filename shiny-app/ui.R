@@ -56,13 +56,12 @@ theme = shinytheme("flatly"),
     tabPanel("Presidential Elections by District",
              
 #Almost forgot to have mainPanel there
-             
+             h3("Total National Spending"),
              mainPanel(
                  plotOutput("carPlot")
                  ),
              
-             h1("Interpretation"),
-             p("These graphs have the amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
+             p("These graphs have the total amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
                The line helps reveal the correlation that, as a trend, districts that spend more money on education tend to vote more for Democrats that Republicans in Presidential elections.
                It an be seen with each election from 2000 to 2016 that this trend tends to be the same across the board."),
              
@@ -70,7 +69,19 @@ theme = shinytheme("flatly"),
                This means that the graphs are likely comparing large and small school systems instead of the amount of money actually being spent per student, which is a better indicator for education funding.
                With this in mind, the graph tells us that larger school systems, likely from states such as California and New York, are more likely to vote Democratic than smaller ones, which are more likely to be from states like Mississippi and Wyoming.
                Beyond a state divide, this could also speak to an urban rural divide, as urban areas are more likely to have larger school sysyems than rural ones, resutling in more money being spent in urban areas with the same quality of education as a rural area that spends less.
-               Since urban areas are more likely to vote for Democrats, this trend makes sense.")
+               Since urban areas are more likely to vote for Democrats, this trend makes sense."),
+                
+            h3("Per Capita National Spending"),
+            mainPanel(
+                plotOutput("nationalPlot")
+                ),
+            p("The graph to the left is the national version of the spending per capita graph.
+            It can be seen that the spending per capita of the different school districts is more similar than their total spending, likely because of the difference in district sizes.
+            The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.
+            Looks can be quite decieving, however, as the actual points of the graph tell otherwise.
+            With the points bein g clustered around one area on the x-axis, it seems that school districts across the country tend to spend around the same amount of money per student on average.
+            With this being the case, it is impossible for there to be nearly as strong a correlation as the line would suggest.
+            The reality is that the line is created using the outlier data, as the graph tries really hard to make it in the first place.")
              
     ),
 
@@ -167,19 +178,11 @@ tabPanel("Vote Share Per Capita",
          p("The second graph is the Texas spending per capita plot.
            Something notable about this plot is that while the line appears to show a negative correlation between Democratic vote share and per capita school spending, the actual points reveal no such thing.
            The points are clustered around one area on the x-axis, which means that Texas school districts tend to spend about the same amount on education for each student.
-           With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party."),
-             
-         h2("Capita Spending National Plot"),
-             mainPanel(
-                 plotOutput("nationalPlot")
-             ),
-         p("The third graph to the left is the national version of the spending per capita graph.
-           It can be seen that the spending per capita of the different school districts is more similar than their total spending, likely because of the difference in district sizes.
-           The correlation between spending per capita and the Democratic vote share also seems to be more strong, implying that the quality of education, which is heavily influenced by spending per capita, has a large affect on voting patterns.
-           Looks can be quite decieving, however, as the actual points of the graph tell otherwise.
-           With the points bein g clustered around one area on the x-axis, it seems that school districts across the country tend to spend around the same amount of money per student on average.
-           With this being the case, it is impossible for there to be nearly as strong a correlation as the line would suggest.
-           The reality is that the line is created using the outlier data, as the graph tries really hard to make it in the first place.")
+           With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party.")
+      
+         #I had the national per capita plot here, I might move it.
+        
+         
     
 ),
 
