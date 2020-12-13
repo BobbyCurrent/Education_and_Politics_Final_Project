@@ -17,6 +17,7 @@ library(gt)
 library(broom.mixed)
 library(rstanarm)
 
+#So I did decicde to go with the alpha argument for everything.
 # Define UI for application that draws a histogram
 shinyUI(navbarPage(
 theme = shinytheme("flatly"),
@@ -27,6 +28,8 @@ theme = shinytheme("flatly"),
 
     tabPanel("About",
              h1("Partisan Spending"),
+             
+#Partisan Spending is a much better title than whatever I had before.
              
              p("My project is about the possible correlation between the amount of money spent on K-12 education in America and voting patterns.
                I want to see if states with better funded education systems tend to lean toward the Democratic or Republican party in presidential elections.
@@ -61,7 +64,10 @@ theme = shinytheme("flatly"),
 #Almost forgot to have mainPanel there
              h3("Total National Spending"),
              mainPanel(
-                 plotOutput("carPlot")
+                 plotOutput("firstPlot")
+                 
+#Thought I should change that from carPlot to something else.
+
                  ),
              
              p("The graph to the left has the total amount of money spent on education in each school district on the x-axis and the percentage of the vote that Democratic presidential candidates get in those districts on the y-axis.
