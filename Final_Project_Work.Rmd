@@ -18,6 +18,7 @@ library(broom.mixed)
 
 
 ```{r relevent data}
+#Only the stuff I used ended up over here.
 
 presidential_elections <- read_csv("Raw_Data/countypres_2000-2016.csv") %>%
   mutate(vote_prop = (candidatevotes / totalvotes)) %>%
@@ -206,7 +207,10 @@ final_data %>%
   #filter(year == 2016) %>%
   #filter(stabbr == "SC") %>%
   ggplot(aes(x = totalexp, y = percent_won_democrat)) +
-  geom_point(alpha = 0.3) +
+  
+#I think I am going to add an alpha argument to this.
+  
+  geom_point(alpha = 0.25) +
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
@@ -221,6 +225,9 @@ final_data %>%
 ```
 
 ```{r yearPlot}
+#This chunk messed me up when I tried to run everything, 
+#since it is ready for shiny already.
+#input$years and input$state is one hundred percent shiny.
 
 final_data %>%
   filter(input$years) %>%
@@ -245,12 +252,13 @@ final_data %>%
 
 
 ```{r yearPlot examples}
+#I don't know if I want to add an alpha argument to shiny.
 
 final_data %>%
   #filter(year == 2016) %>%
   filter(stabbr == "OH") %>%
   ggplot(aes(x = totalexp, y = percent_won_democrat)) +
-  geom_point() +
+  geom_point(alpha = 0.4) +
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
@@ -270,6 +278,9 @@ final_data %>%
 
 
 ```{r stan}
+#Stan is useless for stuff by each dollar, so I made this so that I could see 
+#the affect per million or thousand dollars.
+#I should mention this in my shiny app somewhere.
 
 final_data_million <- 
   final_data %>%
@@ -373,5 +384,18 @@ final_data %>%
 
 ```
 
+```{r}
+saveRDS(final_data, file = "saved_file")
+
+readRDS("saved_file")
+
+
+saveRDS(final_data_million, file = "stan_data")
+
+readRDS("stan_data")
+
+
+
+```
 
 

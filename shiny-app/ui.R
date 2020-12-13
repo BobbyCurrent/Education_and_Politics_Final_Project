@@ -39,11 +39,14 @@ theme = shinytheme("flatly"),
                "All the data I used about education funding and statistics came from the NCES (National Center for Education Statistics).
                The link to my education data is", a("here.", href = "https://nces.ed.gov/ccd/files.asp#Fiscal:2,LevelId:2,SchoolYearId:32,Page:1")),
              
-             p("The link to my git repository of this project is", a("here.", href = "https://github.com/BobbyCurrent/Education_and_Politics_Final_Project"),
+             p("The link to my github repository of this project is", a("here.", href = "https://github.com/BobbyCurrent/Education_and_Politics_Final_Project"),
                "This repository has record of how the project was created and has all of the background information in it.
                It shows how the data was cleaned, how the graphs were made, and everything in between."),
              
              h2("About Me"),
+             
+             #I could have done a link to my email, but I'm not sure how that 
+             #would work. I also just don't want to, they can copy and paste.
              
              p("My name is Bobby Current and I am a first year student at Harvard College.
                My concentration will most likely either be government or history, with one of them possibly being a secondary.
@@ -70,6 +73,9 @@ theme = shinytheme("flatly"),
                With this in mind, the graph tells us that larger school systems, likely from states such as California and New York, are more likely to vote Democratic than smaller ones, which are more likely to be from states like Mississippi and Wyoming.
                Beyond a state divide, this could also speak to an urban rural divide, as urban areas are more likely to have larger school sysyems than rural ones, resutling in more money being spent in urban areas with the same quality of education as a rural area that spends less.
                Since urban areas are more likely to vote for Democrats, this trend makes sense."),
+
+#I added the plot below here instead of having it with the other per capita 
+#plots. It goes here much better than it does there.
                 
             h3("Per Capita National Spending"),
             mainPanel(
@@ -181,6 +187,7 @@ tabPanel("Vote Share Per Capita",
            With this being the case, it is clear that Texas does not reveal a correlation between higher spending per student and more votes going to the Democratic Party.")
       
          #I had the national per capita plot here, I might move it.
+         #I moved it, it looks better there.
         
          
     
@@ -194,6 +201,7 @@ tabPanel("Analysis",
              gt_output("stanPrint")
          ),
          p("This table predicts the mathematical effect the amount of students, the per capita revenue, and the per capita expenditure has on Demcratic vote share.
+         The percapita spending, both revenue and expenditures, are looked at by thousands of dollars as a unit of analysis, as a single dollar is highly unlikely to have an affect when so much money is being spent.
            The intercept is the Democratic vote share.
            This means that, without the amount of students or per capita spending being considered, Democrats are predicted to win an average of 44% of the popular vote in school districts.
            This makes sense, as more states vote Republican than Democrat on the presidential level and Democratic areas tend to be concentrated in cities rather than spread out across the countryside."),
@@ -207,6 +215,7 @@ tabPanel("Analysis",
            This impact, a 0.00000006 percent change to the intercept, is also negligible, as it has even less of a predicted effect than the amount of students did on voting patterns."),
         
          #Added another plot, and some headers
+         #Might need to say something about unit of analysis
          
           h1("Total Spending"),
          mainPanel(
@@ -214,7 +223,7 @@ tabPanel("Analysis",
          ),
          p("As with the table above, there is little to no effect of school spending on voting patterns. 
          The Intercept is still the Democratic Vote Share in presidential elections, and the variables changed from the spending per captia to the total spending, with the amount ot students not being  factor.
-         It can be seen that the total spending and revenue both have a negligible influence on Democratic vote share.
+         It can be seen that the total spending and revenue, which are counted by the millions in this table instead of single dollars or thousands of dollars, both have a negligible influence on Democratic vote share.
          The table predicts that the Democrats only get 0.0446 percent more of the vote when school revenue is considered and they lose 0.0319 percent of the vote when the spending is considered.
          This means that there is little to no effect of total school spending and revenue on voting patterns in America."),
          

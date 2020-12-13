@@ -17,6 +17,9 @@ library(gtsummary)
 ```
 
 ```{r}
+#I didn't end up using most of the data I read in below.
+#I really only used the presidential elections
+
 school_spending_2017_2018 <-
 spending_data_2018 <-
   read_excel("Raw_Data/Stfis180_1a.xlsx") %>%
@@ -68,6 +71,8 @@ spending_per_student_by_state <- read_excel("Raw_Data/public-school-per-pupil-ex
 
 
 ```{r join}
+# I don't even remember what this was going to be used for,
+#just that it did not work.
 
 districts_and_counties <- left_join(district_spending, districts_by_county, by = c("NAME" = "NAME_LEA19_UPPER")) %>%
   mutate(NAME_COUNTY19 = str_replace(NAME_COUNTY19, "County", ""))
@@ -88,10 +93,17 @@ districts_and_counties <- left_join(district_spending, districts_by_county, by =
 
 #Select relevant columns, mutate year column for each one. Join all of them together, by year and district, full join. Only add president stuff after this step.
 
+#This is the good stuff.
+#I used it to make my final data
+
+
 students_2012 <- read_csv("Raw_Data/non_fiscal_2012.csv", col_types = cols(MEMBER = col_double(),
                                                                            LEAID = col_double())) %>%
   clean_names() %>%
   select(member, leaid) 
+
+#Students_2012 gave me the number of students in each district
+#Spending 2012 gave me the amount spent.
 
 spending_2012 <- read_csv("Raw_Data/district_spending_2011.csv", 
                           col_types = cols(name = col_character(),
@@ -252,7 +264,7 @@ spending_2000 <- read_csv("Raw_Data/district_spending_2000.csv",
 ```
 
 ```{r new joins}
-
+#Okay, so I finally made my final data tibble here.
 
 final_data <- bind_rows(joined_temp, spending_2000) %>%
   left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
@@ -261,6 +273,7 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
 ```
 
 ```{r plots}
+# My first plot using my data
 
 final_data %>%
   #filter(year == 2016) %>%
@@ -270,6 +283,10 @@ final_data %>%
   geom_smooth(method = "lm") +
   scale_x_log10() +
   facet_wrap(~ year) +
+  
+  #Always gotta facet_wrap. Especially with this.
+  #Did by year since its readable, state would be too much.
+  
   labs(title = "School Spending and Democratic Vote Share in Presidential Elections", subtitle = "Democratic vote share in United States since the 2000 election", x = "Presidential Elections From 2000 to 2016", y = "Percent of vote for Democratic Candidate")
 
 
@@ -280,6 +297,9 @@ final_data %>%
 
 
 ```{r}
+#My first attepmts at stan_glm with this.
+#It was very disappointing.
+
 stan_glm(data = final_data,
          formula = percent_won_democrat ~ tstrev + tlocrev,
          refresh = 0) %>%
@@ -292,6 +312,10 @@ print(digits = 5)
 
 
 ```{r non fiscal stuff}
+# This is where I first read in the student per district data.
+#I did it here so that I could just copy and paste later.
+#I changed the name so that it would not mess with the ones I had to join.
+
 temp_students_2008 <- read_csv("Raw_Data/non_fiscal_2008.csv") %>%
   clean_names() %>%
   select(conum07, pk1207, name07, leaid) %>%
@@ -311,6 +335,9 @@ temp_students_2016 <- read_csv("Raw_Data/membership_2016.csv") %>%
   clean_names() %>%
   select(total)
 
+#Only got data from 2008, 2012, and 2016.
+#The stuff from 2000 and 2004 was too old to salvage.
+
 
 #temp_students_2004 <- read.table("Raw_Data/students_2004.dat")
                                  
@@ -323,6 +350,8 @@ temp_students_2016 <- read_csv("Raw_Data/membership_2016.csv") %>%
 
 
 ```{r}
+#This is somewhere else I tried to join stuff and failed.
+#Final_data version 1. It failed spectacularly, I think when the presidential data was added.
 
 county_codes <- read_csv("Raw_Data/county_codes.csv") %>%
   clean_names() %>%
