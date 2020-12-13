@@ -19,6 +19,7 @@ library(gtsummary)
 ```{r}
 #I didn't end up using most of the data I read in below.
 #I really only used the presidential elections
+#I thought about getting rid of this but decided not to.
 
 school_spending_2017_2018 <-
 spending_data_2018 <-
