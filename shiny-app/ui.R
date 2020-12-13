@@ -17,7 +17,7 @@ library(gt)
 library(broom.mixed)
 library(rstanarm)
 
-#So I did decicde to go with the alpha argument for everything.
+#So I did decide to go with the alpha argument for everything.
 # Define UI for application that draws a histogram
 shinyUI(navbarPage(
 theme = shinytheme("flatly"),
@@ -62,6 +62,7 @@ theme = shinytheme("flatly"),
     tabPanel("Presidential Elections by District",
              
 #Almost forgot to have mainPanel there
+
              h3("Total National Spending"),
              mainPanel(
                  plotOutput("firstPlot")

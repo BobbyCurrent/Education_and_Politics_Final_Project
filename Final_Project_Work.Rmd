@@ -388,12 +388,12 @@ final_data %>%
 #I made these files so that the data could be read in quicker.
 #I think they work, but it still takes a minute for it to run.
 
-saveRDS(final_data, file = "saved_file")
+#saveRDS(final_data, file = "saved_file")
 
 readRDS("saved_file")
 
 
-saveRDS(final_data_million, file = "stan_data")
+#saveRDS(final_data_million, file = "stan_data")
 
 readRDS("stan_data")
 
