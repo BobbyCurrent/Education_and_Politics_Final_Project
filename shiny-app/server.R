@@ -187,6 +187,13 @@ final_data <- bind_rows(joined_temp, spending_2000) %>%
     left_join(presidential_elections, by = c("conum" = "FIPS", "year"))
 
 
+#This might just be extraneous, but we will see.
+
+saveRDS(final_data, file = "saved_file")
+
+readRDS("saved_file")
+
+
 final_data_million <- 
     final_data %>%
     filter(year %in% c(2008, 2012, 2016)) %>%
@@ -197,6 +204,13 @@ final_data_million <-
     mutate(Per_Capita_Revenue = (per_capita_rev / 1000)) %>%
     mutate(Per_Capita_Expenditure = (per_capita_exp / 1000)) %>%
     mutate(Total_Students = total_students)
+
+#This also might be extra, but we'll see.
+
+saveRDS(final_data_million, file = "stan_data")
+
+readRDS("stan_data")
+
 
 
 other_stan <- stan_glm(data = final_data_million,
@@ -311,6 +325,7 @@ shinyServer(function(input, output) {
             theme_bw()
     })
     
+    #Per Capita spending table here
     
     output$stanPrint <- render_gt({
         other_stan %>%
@@ -319,7 +334,7 @@ shinyServer(function(input, output) {
                            estimate_fun = function(other_stan)
                                style_sigfig(other_stan, digits = 9)) %>%
             as_gt() %>%
-            tab_header(subtitle = "Effect of Total Students and School Spending on Democratic Vote Share",
+            tab_header(subtitle = "Effect of Total Students and Spending Per Capita on Democratic Vote Share",
                        title = "Regression of Democratic Vote Share in Presidential Elections")
         
     })
@@ -358,6 +373,7 @@ shinyServer(function(input, output) {
             theme_bw()
     })
     
+    #Total spending table, forgot to explicitly say it in title.
     
     output$totalPrint <- render_gt({
         total_stan %>%
@@ -366,7 +382,7 @@ shinyServer(function(input, output) {
                            estimate_fun = function(total_stan)
                                style_sigfig(total_stan, digits = 9)) %>%
             as_gt() %>%
-            tab_header(subtitle = "Effect of School Spending on 
+            tab_header(subtitle = "Effect of Total School Spending on 
              Democratic Vote Share",
                        title = "Regression of Democratic Vote Share in Presidential 
              Elections")
